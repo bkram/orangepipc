@@ -3,16 +3,30 @@ import os
 import time
 import thread
 import daemon
+import sys
+
+'''
+Use the Orange Pi PC onboard LED's to monitor system load and cpu temperature.
+The red one lights up when the load exceeds 1.
+The green one will blink when the temperature exceeds 60 degrees.
+'''
+
+# Changeable settings
+sleeptime = 1
+temptreshold = 60
+loadtreshold = 1
 
 # Define sys files
 tempfile = '/sys/devices/virtual/thermal/thermal_zone0/temp'
 redled = '/sys/class/gpio_sw/normal_led/data'
 greenled = '/sys/class/gpio_sw/standby_led/data'
 
-# Changeable settings
-sleeptime = 1
-temptreshold = 60
-loadtreshold = 1
+
+def checkroot():
+    # check if we are being run as root
+    if not os.geteuid() == 0:
+        print 'leddaemon.py requires to be run as root'
+        sys.exit(1)
 
 
 def setled(led, state):
@@ -67,7 +81,8 @@ def monitor():
     thread.start_new_thread(check_load, (1, lock))
     thread.start_new_thread(check_temp, (1, lock))
     while True:
-        time.sleep(1)
+        time.sleep(60)
 
 if __name__ == "__main__":
+    checkroot()
     main()
