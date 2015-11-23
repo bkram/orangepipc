@@ -1,11 +1,11 @@
 leddaemon
 ---
 
-Use the Orange Pi PC onboard LED's to monitor system load and cpu temperature.
+Use the Orange Pi PC onboard LEDs to monitor system load and cpu temperature.
 
-The red one lights up when the load exceeds 1.
+The red LED lights up when the system load exceeds 1.
 
-The green one will blink when the temperature exceeds 60 degrees.
+The green LED, will light up when the daemon is running and it will blink when the temperature exceeds 60 degrees Celsius.
 
 Of course these defaults can be changed in the script.
 

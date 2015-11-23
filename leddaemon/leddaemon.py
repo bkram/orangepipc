@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 import os
-import time
 import thread
+import time
 import daemon
 import sys
 
 '''
-Use the Orange Pi PC onboard LED's to monitor system load and cpu temperature.
-The red one lights up when the load exceeds 1.
-The green one will blink when the temperature exceeds 60 degrees.
+Use the Orange Pi PC onboard LEDs to monitor system load and cpu temperature.
+The red LED lights up when the system load exceeds 1.
+The green LED will light up when the daemon is run and it will blink when the temperature exceeds 60 degrees Celsius.
+Changeable settings below.
 '''
 
 # Changeable settings
@@ -82,6 +83,7 @@ def monitor():
     thread.start_new_thread(check_temp, (1, lock))
     while True:
         time.sleep(60)
+
 
 if __name__ == "__main__":
     checkroot()
