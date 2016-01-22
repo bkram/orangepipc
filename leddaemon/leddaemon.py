@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# (c) 2016 bkram, GPL see LICENSE file
 import os
 import thread
 import time
@@ -18,7 +19,8 @@ temptreshold = 60
 loadtreshold = 1
 
 # Define sys files
-tempfile = '/sys/devices/virtual/thermal/thermal_zone0/temp'
+tempzonea = '/sys/devices/virtual/thermal/thermal_zone0/temp'
+tempzoneb = '/sys/devices/virtual/thermal/thermal_zone1/temp'
 redled = '/sys/class/gpio_sw/normal_led/data'
 greenled = '/sys/class/gpio_sw/standby_led/data'
 
@@ -56,14 +58,15 @@ def check_load(lock, *args):
 def check_temp(lock, *args):
     # Check temperature, and blink green led if treshold is exceeded.
     while True:
-        temp = int(open(tempfile, 'r').readline().strip('\n'))
+        tempa = int(open(tempzonea, 'r').readline().strip('\n'))
+        tempb = int(open(tempzoneb, 'r').readline().strip('\n'))
+        temp = (tempa + tempb) / 2
 
         if temp >= temptreshold:
-            for x in range(0, 1):
-                setled(greenled, 0)
-                time.sleep(.6)
-                setled(greenled, 1)
-                time.sleep(.6)
+            setled(greenled, 0)
+            time.sleep(.6)
+            setled(greenled, 1)
+            time.sleep(.6)
         else:
             setled(greenled, 1)
         time.sleep(sleeptime)
